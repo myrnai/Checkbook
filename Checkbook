@@ -1,0 +1,76 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+//part(a)
+class Check {
+private:
+    static int number;
+    int CheckNum;
+    string CheckMemo;
+    float CheckAmount;
+public:
+    Check():CheckNum(0), CheckMemo(""), CheckAmount(0) {
+        ++number;
+    }
+    int getCheckNum() const {return CheckNum;}
+    void setCheckNum(int num) {CheckNum = num;}
+    string getCheckMemo() const {return CheckMemo;}
+    void setCheckMemo(const string& memo) {CheckMemo=memo;}
+    float getCheckAmount() const {return CheckAmount;}
+    void setCheckAmount(float amount) {CheckAmount=amount;}
+    static int getNumber() {return number;}
+};
+
+//part(b)
+int Check::number = 0;
+class CheckBook{
+private:
+    static int allChecks;
+    Check checks[5];
+    float balance;
+    int numOfChecks;
+    const int N;
+public:
+    CheckBook(float initialBalance):balance(initialBalance), numOfChecks(0), N(5) {}
+    bool writeCheck(float amount){
+        if (numOfChecks<N&&allChecks<10&&amount<=balance){
+            cout<<"memo?"<<endl;
+            string memo;
+            cin>>memo;
+            checks[numOfChecks].setCheckNum(numOfChecks);
+            checks[numOfChecks].setCheckMemo(memo);
+            checks[numOfChecks].setCheckAmount(amount);
+            balance-=amount;
+            ++numOfChecks;
+            ++allChecks;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    void displayChecks() const{
+        for (int i=numOfChecks-1; i>=0; --i){
+            cout<<checks[i].getCheckAmount()<<" "<<checks[i].getCheckNum()<<" "<<checks[i].getCheckMemo()<<endl;
+        }
+    }
+    static int getallChecks() {return allChecks;}
+};
+int CheckBook::allChecks=0;
+//part(c)
+int main() {
+    CheckBook cb1(1000), cb2(500);
+    for (int i=0; i<10; ++i) {
+        cb1.writeCheck(150);
+        cb2.writeCheck(130);
+    }
+    cout<<"cb1 check details"<<endl;
+    cb1.displayChecks();
+    cout<<"cb2 check details"<<endl;
+    cb2.displayChecks();
+    cout<<cb1.getallChecks()<<endl;
+    cout<<cb2.getallChecks()<<endl;
+
+    return 0;
+}
